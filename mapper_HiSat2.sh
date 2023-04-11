@@ -54,11 +54,11 @@ MyID=team5          ## Example: MyID=aubtss
 
 WD=/scratch/$MyID                                                ## Example:/scratch/$MyID/PracticeRNAseq  
 CLEAND=/scratch/$MyID/CleanData                                            ## Example:/scratch/$MyID/PracticeRNAseq/CleanData20   #   *** This is where the cleaned paired files are located
-REFD=/scratch/$MyID/ref/PodMur                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
+REFD=/scratch/$MyID/refAnet/PodMur                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
 MAPD=/scratch/$MyID/Map_HiSat2                                              ## Example:/scratch/$MyID/PracticeRNAseq/Map_HiSat2_6
 COUNTSD=/scratch/$MyID/Counts_StringTie                                           ## Example:/scratch/$MyID/PracticeRNAseq/Counts_StringTie_6
 
-RESULTSD=/scratch/aubclsb0309/FunGenProject/Counts_H_S                                         ## Example:/home/aubtss/PracticeRNAseq/Counts_H_S_6
+RESULTSD=/scratch/$MyID/FunGenProject/Counts_H_S                                         ## Example:/home/aubtss/PracticeRNAseq/Counts_H_S_6
 
 REF=GCF_004329235.1_PodMur_1.0_genomic               ## This is what the "easy name" will be for the genome reference
 
@@ -70,8 +70,8 @@ mkdir -p $RESULTSD
 
 ##################  Prepare the Reference Index for mapping with HiSat2   #############################
 cd $REFD
-cp /scratch/team5/ref/PodMur/$REF.fna .
-cp /scratch/team5/ref/PodMur/$REF.gff .
+cp /scratch/team5/refAnet/PodMur/$REF.fna .
+cp /scratch/team5/refAnet/PodMur/$REF.gff .
 
 ###  Identify exons and splice sites
 gffread $REF.gff -T -o $REF.gtf               ## gffread converts the annotation file from .gff3 to .gft formate for HiSat2 to use.

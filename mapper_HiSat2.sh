@@ -60,7 +60,7 @@ COUNTSD=/scratch/$MyID/Counts_StringTie                                         
 
 RESULTSD=/scratch/$MyID/FunGenProject/Counts_H_S                                         ## Example:/home/aubtss/PracticeRNAseq/Counts_H_S_6
 
-REF=GCF_004329235.1_PodMur_1.0_genomic               ## This is what the "easy name" will be for the genome reference
+REF=Podarcis_muralis.PodMur_1.0.DNA              ## This is what the "easy name" will be for the genome reference
 
 ## Make the directories and all subdirectories defined by the variables above
 mkdir -p $REFD
@@ -70,16 +70,16 @@ mkdir -p $RESULTSD
 
 ##################  Prepare the Reference Index for mapping with HiSat2   #############################
 cd $REFD
-cp /scratch/team5/refAnet/PodMur/$REF.fna .
-cp /scratch/team5/refAnet/PodMur/$REF.gff .
+cp /scratch/team5/refAnet/PodMur/$REF.fa .
+cp /scratch/team5/refAnet/PodMur/$REF.gff3 .
 
 ###  Identify exons and splice sites
-gffread $REF.gff -T -o $REF.gtf               ## gffread converts the annotation file from .gff3 to .gft formate for HiSat2 to use.
+gffread $REF.gff3 -T -o $REF.gtf               ## gffread converts the annotation file from .gff3 to .gft formate for HiSat2 to use.
 extract_splice_sites.py $REF.gtf > $REF.ss
 extract_exons.py $REF.gtf > $REF.exon
 
 #### Create a HISAT2 index for the reference genome. NOTE every mapping program will need to build its own index.
-hisat2-build --ss $REF.ss --exon $REF.exon $REF.fna PodMur_1.0_index
+hisat2-build --ss $REF.ss --exon $REF.exon $REF.fa PodMur_1.0_index
 
 ########################  Map and Count the Data using HiSAT2 and StringTie  ########################
 

@@ -1,0 +1,16 @@
+SampleName	TISSUE
+1	Heart
+2	Heart
+3	Heart
+4	Heart
+5	Heart
+6	Liver
+7	Liver
+8	Liver
+9	Liver
+10	Liver
+11	Skeletal_Muscle
+12	Skeletal_Muscle
+13	Skeletal_Muscle
+14	Skeletal_Muscle
+15	Skeletal_Muscle

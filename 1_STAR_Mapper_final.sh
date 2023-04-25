@@ -2,8 +2,6 @@
 
 
 
-#! /bin/bash
-
 source /opt/asn/etc/asn-bash-profiles-special/modules.sh
 # Loading modules
 module load star/
@@ -29,8 +27,8 @@ set -x
 MyID=aubclsb0312
 
 WD=/scratch/$MyID/Whiptail_Samples  
-CLEAND=/scratch/aubclsb0312/Whiptail_Samples/CleanData
-REFD=/scratch/aubclsb0312/Whiptail_Samples/ref/PodMur                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
+CLEAND=/scratch/$MyID/Whiptail_Samples/CleanData
+REFD=/scratch/$MyID/Whiptail_Samples/ref/PodMur                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
 MAPD=/scratch/$MyID/Whiptail_Samples/Map_STAR                                             
 COUNTSD=/scratch/$MyID/Whiptail_Samples/Counts_StringTie_6
 
@@ -40,8 +38,8 @@ REF=GCF_004329235.1_PodMur_1.0_genomic
 
 #mkdir -p $REFD
 mkdir -p $MAPD
-mkdir -p $COUNTSD
-mkdir -p $RESULTSD
+#mkdir -p $COUNTSD
+#mkdir -p $RESULTSD
 
 
 cd $REFD
@@ -63,9 +61,9 @@ cd $CLEAND
 ls | grep ".fastq.gz" |cut -d "_" -f 1| sort | uniq > list
 
 
-#cd $MAPD
+cd $MAPD
 
-#mv $CLEAND/list  .
+mv $CLEAND/list  .
 
 
 while read i;

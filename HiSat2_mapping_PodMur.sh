@@ -54,13 +54,13 @@ MyID=team5          ## Example: MyID=aubtss
 
 WD=/scratch/$MyID                                                ## Example:/scratch/$MyID/PracticeRNAseq  
 CLEAND=/scratch/$MyID/CleanData                                            ## Example:/scratch/$MyID/PracticeRNAseq/CleanData20   #   *** This is where the cleaned paired files are located
-REFD=/scratch/$MyID/refAnet/PodMur                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
+REFD=/scratch/$MyID/refAnet/AspMar                                              ## Example:/scratch/$MyID/PracticeRNAseq/DaphniaRefGenome_6                      # this directory contains the indexed reference genome for the garter snake
 MAPD=/scratch/$MyID/Map_HiSat2                                              ## Example:/scratch/$MyID/PracticeRNAseq/Map_HiSat2_6
 COUNTSD=/scratch/$MyID/Counts_StringTie                                           ## Example:/scratch/$MyID/PracticeRNAseq/Counts_StringTie_6
 
 RESULTSD=/scratch/$MyID/FunGenProject/Counts_H_S                                         ## Example:/home/aubtss/PracticeRNAseq/Counts_H_S_6
 
-REF=Podarcis_muralis.PodMur_1.0.DNA              ## This is what the "easy name" will be for the genome reference
+REF=AspMar1.0              ## This is what the "easy name" will be for the genome reference
 
 ## Make the directories and all subdirectories defined by the variables above
 mkdir -p $REFD
@@ -70,8 +70,8 @@ mkdir -p $RESULTSD
 
 ##################  Prepare the Reference Index for mapping with HiSat2   #############################
 cd $REFD
-cp /scratch/team5/refAnet/PodMur/$REF.fa .
-cp /scratch/team5/refAnet/PodMur/$REF.gff3 .
+cp /scratch/team5/refAnet/AspMar/$REF.fna.
+cp /scratch/team5/refAnet/AspMar/$REF.gff .
 
 ###  Identify exons and splice sites
 gffread $REF.gff3 -T -o $REF.gtf               ## gffread converts the annotation file from .gff3 to .gft formate for HiSat2 to use.
@@ -79,7 +79,7 @@ extract_splice_sites.py $REF.gtf > $REF.ss
 extract_exons.py $REF.gtf > $REF.exon
 
 #### Create a HISAT2 index for the reference genome. NOTE every mapping program will need to build its own index.
-hisat2-build --ss $REF.ss --exon $REF.exon $REF.fa PodMur_1.0_index
+###hisat2-build --ss $REF.ss --exon $REF.exon $REF.fa PodMur_1.0_index
 
 ########################  Map and Count the Data using HiSAT2 and StringTie  ########################
 
@@ -100,9 +100,10 @@ while read i;
 do
   ## HiSat2 is the mapping program
   ##  -p indicates number of processors, --dta reports alignments for StringTie --rf is the read orientation
-   hisat2 -p 6 --dta --phred33       \
+   hisat2 -p 6 --dta --phred33 --rf   \
     -x "$REFD"/PodMur_1.0_index       \
-    -1 "$CLEAND"/"$i"_1_paired.fastq  -2 "$CLEAND"/"$i"_2_paired.fastq      \
+    -1 "$CLEAND"/"$i"_1_paired.fastq  -2 "$CLEAND"/"$i"_2_paired.fastq
+    ## "$CLEAND"/"$i"_1_paired.fastq   \
     -S "$i".sam
 
     ### view: convert the SAM file into a BAM file  -bS: BAM is the binary format corresponding to the SAM text format.
@@ -122,7 +123,7 @@ do
   ### eAB options: This will run stringtie once and  ONLY use the Ref annotation for counting readsto genes and exons 
   ###
 mkdir "$COUNTSD"/"$i"
-stringtie -p 6 -e -B -G  "$REFD"/"$REF".gtf -o "$COUNTSD"/"$i"/"$i".gtf -l "$i"   "$MAPD"/"$i"_sorted.bam
+stringtie -p 27 "$REFD"/"$REF".gtf -o "$COUNTSD"/"$i"/"$i".gtf -l "$i"   "$MAPD"/"$i"_sorted.bam
 
 done<list
 
